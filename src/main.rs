@@ -14,14 +14,14 @@ struct ExtensionRegex {
     svg: Regex
 }
 
-// static ExtRe: ExtensionRegex = ExtensionRegex {
+// static ext_re: ExtensionRegex = ExtensionRegex {
 //     font: Regex::new(r"").unwrap(),
 //     img: Regex::new(r"(?:jpg|jpeg|png|svg|gif)$").unwrap(),
 //     svg: Regex::new(r"\\.svg$").unwrap()
 // };
 
 fn main () {
-    let ExtRe: ExtensionRegex = ExtensionRegex { // TODO: make this static
+    let ext_re: ExtensionRegex = ExtensionRegex { // TODO: make this static
         font: Regex::new(r"").unwrap(), // TODO: allow GoogleFont font exetensions
         img: Regex::new(r"(?:jpg|jpeg|png|svg|gif)$").unwrap(), // TODO: ignore case
         svg: Regex::new(r"\\.svg$").unwrap() // TODO: ignore case
@@ -29,14 +29,14 @@ fn main () {
 
     let filename: String = parse_filename_arg();
     let buf: Vec<u8> = read_file_buf(&filename);
-    println!("{}", concat_uri(&filename, &buf, &ExtRe));
+    println!("{}", concat_uri(&filename, &buf, &ext_re));
 }
 
 // TODO: move below to lib.rs
 fn parse_filename_arg () -> String {
     let args: Vec<String> = env::args().collect::<Vec<String>>();
     if args.len() < 2 {
-        panic!("filename missing");
+        panic!("filename required");
     }
     args[1].to_string()
 }
@@ -52,23 +52,23 @@ fn extract_extension(filename: &str) -> Option<&str> {
     Path::new(filename).extension().and_then(OsStr::to_str)
 }
 
-fn concat_uri (filename: &str, buf: &Vec<u8>, ExtRe: &ExtensionRegex) -> String {
+fn concat_uri (filename: &str, buf: &Vec<u8>, ext_re: &ExtensionRegex) -> String {
     let media_t: &str;
     let m_type: &str;
     let ext: &str = extract_extension(filename).expect("missing file extension");
 
     // TODO: match
-    if ExtRe.img.is_match(ext) {
+    if ext_re.img.is_match(ext) {
         media_t = "image";
     }
-    // else if ExtRe.font.is_match(ext) {
+    // else if ext_re.font.is_match(ext) {
     //     media_t = "font";
     // }
     else {
         panic!("unknown file extension");
     }
 
-    if ExtRe.svg.is_match(ext) {
+    if ext_re.svg.is_match(ext) {
         m_type = "svg+xml"
     } else if media_t == "font" {
         m_type = ext;
@@ -76,5 +76,5 @@ fn concat_uri (filename: &str, buf: &Vec<u8>, ExtRe: &ExtensionRegex) -> String 
         m_type = "*"
     }
 
-    format!("data:{}/{};base64,{}", media_t, m_type, base64::encode(buf))
+    format!("data:{}/{};base64,{}", media_t, m_type, &base64::encode(buf))
 }
