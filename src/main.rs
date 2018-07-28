@@ -52,6 +52,8 @@ fn concat_uri (filename: &str, buf: &Vec<u8>) -> () {
     //     media_t = "image";
     // } else if re_font_ext.is_match(ext) {
     //     media_t = "font";
+    // } else {
+    //     panic!("unknown file extension");
     // }
     //
     // if re_svg_ext.is_match(ext) {
@@ -61,4 +63,6 @@ fn concat_uri (filename: &str, buf: &Vec<u8>) -> () {
     // } else {
     //     m_type = "*"
     // }
+
+    // format!("data:{}/{};base64,{}", media_t, m_type, base64::encode(buf))
 }
