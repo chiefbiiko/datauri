@@ -22,9 +22,9 @@ struct ExtensionRegex {
 
 fn main () {
     let ExtRe: ExtensionRegex = ExtensionRegex { // TODO: make this static
-        font: Regex::new(r"").unwrap(),
-        img: Regex::new(r"(?:jpg|jpeg|png|svg|gif)$").unwrap(),
-        svg: Regex::new(r"\\.svg$").unwrap()
+        font: Regex::new(r"").unwrap(), // TODO: allow GoogleFont font exetensions
+        img: Regex::new(r"(?:jpg|jpeg|png|svg|gif)$").unwrap(), // TODO: ignore case
+        svg: Regex::new(r"\\.svg$").unwrap() // TODO: ignore case
     };
 
     let filename: String = parse_filename_arg();
@@ -32,7 +32,7 @@ fn main () {
     println!("{}", concat_uri(&filename, &buf, &ExtRe));
 }
 
-// move below to lib.rs
+// TODO: move below to lib.rs
 fn parse_filename_arg () -> String {
     let args: Vec<String> = env::args().collect::<Vec<String>>();
     if args.len() < 2 {
