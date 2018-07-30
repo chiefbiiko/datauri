@@ -20,9 +20,7 @@ fn main () {
 // TODO: check argv types
 fn parse_filename_arg () -> String {
     let args: Vec<String> = env::args().collect::<Vec<String>>();
-    if args.len() < 2 {
-        panic!("filename required");
-    }
+    if args.len() < 2 { panic!("filename required"); }
     args[1].to_string()
 }
 
@@ -38,8 +36,7 @@ fn extract_extension(filename: &str) -> Option<&str> {
 }
 
 fn infer_img_type (filename: &str) -> &str {
-    let ext: &str = extract_extension(filename).expect("missing file extension");
-    match ext {
+    match extract_extension(filename).expect("missing file extension") {
         "svg" => "svg+xml",
         _ => "*"
     }
